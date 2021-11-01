@@ -1,17 +1,25 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
+@Index('phoneWithCountryCode', ['countryCode', 'phone'], {
+  unique: true,
+})
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  @Index()
   countryCode: number;
 
   @Column()
   phone: number;
 
   @Column()
-  password: string;
+  otpSecret: string;
+
+  @Column({ nullable: true })
+  shareSecret: string;
+
+  @Column({ default: 0 })
+  point: number;
 }
