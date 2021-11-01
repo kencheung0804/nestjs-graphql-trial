@@ -1,11 +1,12 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { AuthService } from '../services/auth.service';
-import { SignupInputDto } from '../dtos/args/signup-input.dto';
-import { ShowUserDto } from '../dtos/response/show-user.dto';
-import { VerifyOtpInputDto } from '../dtos/args/verify-otp-input.dto';
-import { ShowUserSecretDto } from '../dtos/response/show-user-secret.dto';
+import { AuthService } from '../../users/services/auth.service';
+
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/common/guards/auth.guard';
+import { ShareSecretGuard } from '../../common/guards/guards/share-secret.guard';
+import { SignupInputDto } from '../dtos/args/signup-input.dto';
+import { ShowUserDto } from '../../users/dtos/response/show-user.dto';
+import { ShowUserSecretDto } from '../dtos/response/show-user-secret.dto';
+import { VerifyOtpInputDto } from '../dtos/args/verify-otp-input.dto';
 
 @Resolver()
 export class AuthResolver {
@@ -22,7 +23,7 @@ export class AuthResolver {
   }
 
   @Mutation(() => ShowUserSecretDto)
-  @UseGuards(AuthGuard)
+  @UseGuards(ShareSecretGuard)
   verify(@Args('input') input: VerifyOtpInputDto) {
     return this.authService.verify(input.otp, input.countryCode, input.phone);
   }
